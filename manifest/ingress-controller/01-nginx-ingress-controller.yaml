@@ -367,11 +367,13 @@ spec:
     name: http
     port: 80
     protocol: TCP
+    nodePort: 30000
     targetPort: http
   - appProtocol: https
     name: https
     port: 443
     protocol: TCP
+    nodePort: 30001
     targetPort: http
   selector:
     app.kubernetes.io/component: controller

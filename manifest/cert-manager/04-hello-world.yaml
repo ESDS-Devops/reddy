@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-kubernetes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-kubernetes
+  template:
+    metadata:
+      labels:
+        app: hello-kubernetes
+    spec:
+      containers:
+      - name: hello-kubernetes
+        image: paulbouwer/hello-kubernetes:1.5
+        ports:
+        - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-kubernetes
+spec:
+  # use ClusterIP with ingress
+  type: ClusterIP
+  ports:
+  # service listens on http (80)
+  - port: 80
+    # sends to a pod on port 8080
+    targetPort: 8080
+  selector:
+    app: hello-kubernetes
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hello-kubernetes
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - ali.mak-tech.in
+    secretName: production-domain-tls
+  rules:
+  - host: ali.mak-tech.in
+    http:
+      paths:
+      - backend:
+          service:
+            name: hello-kubernetes
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
