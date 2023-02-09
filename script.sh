@@ -24,3 +24,7 @@ kubectl apply -f manifest/ingress-controller/01-nginx-ingress-controller.yaml
 
 echo "Installing Dummy App"
 kubectl apply -f manifest/cert-manager/04-hello-world.yaml
+
+echo "Installing NFS for Cluster"
+# apt install -y nfs-kernel-server
+# https://itnext.io/bare-metal-kubernetes-with-kubeadm-nginx-ingress-controller-and-haproxy-bb0a7ef29d4e

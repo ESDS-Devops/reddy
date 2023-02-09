@@ -7,9 +7,6 @@ sudo apt-get install -y docker.io
 sudo apt-mark hold docker.io
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 
-curl -H "Host: hello-kubernetes.mak-tech.in" http://localhost:31955/
-
-
 # Common on all nodes
 sudo apt-get update
 sudo apt-get install -y \
@@ -48,12 +45,9 @@ sudo modprobe br_netfilter
 sudo sysctl --system
 sudo sysctl -p
 sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
-
 sudo apt-get update
 sudo apt-get install -y kubelet=1.26.1-00 kubeadm=1.26.1-00 kubectl=1.26.1-00
 sudo apt-mark hold kubelet kubeadm kubectl
-
-
 
 # On Master
 ------------
