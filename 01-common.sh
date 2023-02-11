@@ -1,13 +1,8 @@
-On All Nodes
-----------------------
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) Stable"
+#!/bin/bash
+
 sudo apt-get update -y
-sudo apt-get install -y docker.io
-sudo apt-mark hold docker.io
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 
-# Common on all nodes
 sudo apt-get update
 sudo apt-get install -y \
     ca-certificates \
@@ -47,22 +42,3 @@ sudo sysctl -p
 sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
 sudo apt-get update
 sudo apt-get install -y kubelet=1.26.1-00 kubeadm=1.26.1-00 kubectl=1.26.1-00
-sudo apt-mark hold kubelet kubeadm kubectl
-
-# On Master
-------------
-
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-
-# On Worker
------------
-kubeadm join 172.31.13.140:6443 --token 18kfdz.vypi23wmeuxohfd1 \
-   --discovery-token-ca-cert-hash sha256:bbd1c213ae3dfee5456db99cfd1b5aaf86ae9de9fbd7b43fa40b570a87c3f131
-
-
-# On Master
-kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
