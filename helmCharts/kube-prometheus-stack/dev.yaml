@@ -13,7 +13,15 @@ alertmanager:
     - secretName: production-domain-tls
       hosts:
       - alertmanager.mak-tech.in           
-        
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: nfs-client
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi
 grafana:
   ingress:
     ingressClassName: nginx
@@ -29,6 +37,16 @@ grafana:
     - secretName: grafana-production-domain-tls
       hosts:
       - grafana.mak-tech.in
+  sidecar:
+    datasources:
+      url: http://kube-promethues-stack-kube-prometheus.monitoring.svc.cluster.local:9090        
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      access: proxy
+      url: http://loki-stack.monitoring.svc.cluster.local:3100
+      jsonData:
+        maxLines: 1000
 
 prometheus:
   ingress:
@@ -45,3 +63,12 @@ prometheus:
     - secretName: prometheus.production-domain-tls
       hosts:
       - prometheus.mak-tech.in
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: nfs-client
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi

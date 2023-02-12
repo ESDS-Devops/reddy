@@ -8,8 +8,8 @@ image:
 imagePullSecrets: []
 
 nfs:
-  server:
-  path: /nfs-storage
+  server: 10.0.2.4
+  path: /nfs-export
   mountOptions:
   volumeName: nfs-subdir-external-provisioner-root
   # Reclaim policy for the main nfs volume

@@ -753,6 +753,7 @@ grafana:
   forceDeployDashboards: false
 
   ## Deploy default dashboards
+
   ##
   defaultDashboardsEnabled: true
 
@@ -2253,7 +2254,6 @@ prometheus:
     portName: grpc
     port: 10901
     targetPort: "grpc"
-
     ## HTTP port config (for metrics)
     httpPortName: http
     httpPort: 10902
