@@ -1,0 +1,47 @@
+alertmanager:
+  ingress:
+    ingressClassName: nginx      
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+    - alertmanager.mak-tech.in      
+    paths:
+    - /
+    pathType: Prefix  
+    tls:
+    - secretName: production-domain-tls
+      hosts:
+      - alertmanager.mak-tech.in           
+        
+grafana:
+  ingress:
+    ingressClassName: nginx
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+    - grafana.mak-tech.in
+    paths:
+    - /
+    pathType: Prefix
+    tls:
+    - secretName: grafana-production-domain-tls
+      hosts:
+      - grafana.mak-tech.in
+
+prometheus:
+  ingress:
+    ingressClassName: nginx
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+    - prometheus.mak-tech.in
+    paths:
+    - /
+    pathType: Prefix
+    tls:
+    - secretName: prometheus.production-domain-tls
+      hosts:
+      - prometheus.mak-tech.in
