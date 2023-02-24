@@ -1,0 +1,105 @@
+{{- if and (not .Values.ui.runAsRoot) (lt (.Values.ui.service.targetPort | int) 1024) }}
+{{ fail "When `ui.runAsRoot` is false `ui.service.targetPort` must be less than 1024." }}
+{{- end }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "docker-registry-ui.fullname" . }}-user-interface
+  labels:
+    app.kubernetes.io/component	: user-interface
+    {{- include "docker-registry-ui.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.ui.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component	: user-interface
+      {{- include "docker-registry-ui.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component	: user-interface
+        {{- include "docker-registry-ui.labels" . | nindent 8 }}
+      {{- if .Values.ui.annotations }}
+      annotations:
+        {{- toYaml .Values.ui.annotations | nindent 8 | trim }}
+      {{- end }}
+    spec:
+    {{- if ne (.Values.ui.imagePullSecrets | toString) "-" }}
+      imagePullSecrets:
+        {{- toYaml .Values.ui.imagePullSecrets | nindent 8 }}
+    {{- else }}
+      imagePullSecrets:
+        {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
+    {{- end}}
+      containers:
+        - name: "registry-ui"
+          image: {{ .Values.ui.image | quote }}
+          imagePullPolicy: {{ if ne (.Values.ui.imagePullPolicy | toString) "-" }}{{ .Values.ui.imagePullPolicy }}{{ else }}{{ .Values.global.imagePullPolicy }}{{ end }}
+          env:
+            - name: REGISTRY_TITLE
+              value: {{ .Values.ui.title | quote }}
+            - name: DELETE_IMAGES
+              value: {{ .Values.ui.deleteImages | quote }}
+            {{- if .Values.ui.proxy }}
+            {{- if .Values.ui.dockerRegistryUrl }}
+            - name: NGINX_PROXY_PASS_URL
+              value: {{ .Values.ui.dockerRegistryUrl | quote }}
+            {{- else if .Values.registry.enabled }}
+            - name: NGINX_PROXY_PASS_URL
+              value: {{ printf "http://%s-registry-server:%d" (include "docker-registry-ui.fullname" .) (.Values.registry.service.port | int) }}
+            {{- end }}
+            {{- range $header := .Values.ui.nginxProxyHeaders }}
+            {{- range $key, $value := $header }}
+            - name: {{ printf "NGINX_PROXY_HEADER_%s" $key }}
+              value: {{ $value }}
+            {{- end }}
+            {{- end }}
+            {{- range $header := .Values.ui.nginxProxyPassHeaders }}
+            - name: {{ printf "NGINX_PROXY_PASS_HEADER_%s" $header }}
+            {{- end }}
+            {{- else }}
+            - name: REGISTRY_URL
+              value: {{ .Values.ui.dockerRegistryUrl | quote }}
+            {{- end }}
+            - name: PULL_URL
+              value: {{ .Values.ui.pullUrl | quote }}
+            - name: SHOW_CATALOG_NB_TAGS
+              value: {{ .Values.ui.showCatalogNbTags | quote }}
+            - name: SHOW_CONTENT_DIGEST
+              value: {{ .Values.ui.showContentDigest | quote }}
+            - name: SINGLE_REGISTRY
+              value: {{ .Values.ui.singleRegistry | quote }}
+            - name: CATALOG_ELEMENTS_LIMIT
+              value: {{ .Values.ui.catalogElementsLimit | quote }}
+            - name: HISTORY_CUSTOM_LABELS
+              value: {{ .Values.ui.historyCustomLabels | join "," }}
+            - name: NGINX_LISTEN_PORT
+              value: {{ .Values.ui.service.targetPort | quote }}
+            - name: USE_CONTROL_CACHE_HEADER
+              value: {{ .Values.ui.useControlCacheHeader | quote }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.ui.service.targetPort }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.ui.resources | nindent 12 }}
+      {{- with .Values.ui.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 | trim }}
+      {{- end }}
+    {{- with .Values.ui.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 | trim }}
+    {{- end }}
+    {{- with .Values.ui.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 | trim }}
+    {{- end }}
+    {{- if not .Values.ui.runAsRoot }}
+      securityContext:
+        runAsUser: 101
+    {{- end }}
+    {{- if .Values.ui.additionalSpec }}
+      {{ tpl .Values.ui.additionalSpec . | nindent 6 | trim }}
+    {{- end }}

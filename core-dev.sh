@@ -43,3 +43,7 @@ echo "Intalling Loki"
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 helm upgrade --install loki-stack --namespace monitoring helmCharts/loki-stack --values helmCharts/loki-stack/dev.yaml
+
+echo "Intalling Docker Image Registry"
+helm upgrade --install docker-registry --namespace container-registry helmCharts/docker-registry --values helmCharts/docker-registry/dev.yaml
+

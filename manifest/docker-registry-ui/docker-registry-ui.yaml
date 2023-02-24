@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  labels:
+    app: docker-registry-ui
+  name: docker-registry-ui
+  namespace: container-registry
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: registry-ui.mak-tech.in
+    http:
+      paths:
+      - backend:
+          service:
+            name: docker-registry-ui-docker-registry-ui-user-interface
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - registry-ui.mak-tech.in
+    secretName: production-domain-tls
