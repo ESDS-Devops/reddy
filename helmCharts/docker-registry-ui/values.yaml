@@ -13,17 +13,17 @@ ui:
   # Title of the registry
   title: "Docker registry UI"
   # Allow delete of images
-  deleteImages: false
+  deleteImages: true
   # UI behave as a proxy of the registry
   proxy: false
   # The URL of your docker registry, may be a service (when proxy is on) or an external URL.
-  dockerRegistryUrl: null
+  dockerRegistryUrl: https://registry.mak-tech.in
   # Override the pull URL
   pullUrl: null
   # Show number of tags per images on catalog page. This will produce + nb images requests, not recommended on large registries.
-  showCatalogNbTags: false
+  showCatalogNbTags: true
   # Show content digest in docker tag list.
-  showContentDigest: false
+  showContentDigest: true
   # Remove the menu that show the dialogs to add, remove and change the endpoint of your docker registry.
   singleRegistry: true
   # Limit the number of elements in the catalog page.
@@ -81,9 +81,9 @@ ui:
 
   ingress:
     # Enable the ingress for the user interface.
-    enabled: false
+    enabled: true
     # Fully qualified domain name of a network host.
-    host: null
+    host: registry-ui.mak-tech.in
     # Path is matched against the path of an incoming request.
     path: /
     # Determines the interpretation of the Path matching, must be Prefix to serve assets.
@@ -91,9 +91,13 @@ ui:
     # The name of an IngressClass cluster resource.
     ingressClassName: nginx
     # TLS configuration
-    tls: []
+    tls:
+    - secretName: docker-registry-ui-production-domain-tls
+      hosts:
+        - registry-ui.mak-tech.in    
     # Annotations to apply to the user interface ingress.
-    annotations: {}
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
     # If you want a custom path, you can try this example:
     # path: /ui(/|$)(.*)
     # annotations:
@@ -143,19 +147,26 @@ registry:
 
   ingress:
     # Enable the ingress for the registry server.
-    enabled: false
+    enabled: true
     # Fully qualified domain name of a network host.
-    host: null
+    host: registry.mak-tech.in
     # Path is matched against the path of an incoming request.
-    path: /v2/
+    path: /
     # Determines the interpretation of the Path matching, must be Prefix to serve assets.
     pathType: Prefix
     # The name of an IngressClass cluster resource.
     ingressClassName: nginx
     # TLS configuration
-    tls: []
+    tls:
+    - secretName: docker-registry-production-domain-tls
+      hosts:
+        - registry.mak-tech.in 
     # Annotations to apply to the registry server ingress.
-    annotations: {}
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: 1000m
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/cors-allow-origin: "https://registry-ui.mak-tech.in"
+      nginx.ingress.kubernetes.io/enable-cors: 'true'
     # If you want a custom path, you can try this example:
     # path: /api(/|$)(.*)
     # annotations:
