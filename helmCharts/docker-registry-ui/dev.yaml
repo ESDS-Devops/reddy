@@ -92,9 +92,9 @@ ui:
     ingressClassName: nginx
     # TLS configuration
     tls:
-    - secretName: docker-registry-ui-production-domain-tls
+    - secretName: dev-registry-ui
       hosts:
-        - registry-ui.mak-tech.in    
+        - registry-ui.mak-tech.in
     # Annotations to apply to the user interface ingress.
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
@@ -147,7 +147,7 @@ registry:
 
   ingress:
     # Enable the ingress for the registry server.
-    enabled: true
+    enabled: false
     # Fully qualified domain name of a network host.
     host: registry.mak-tech.in
     # Path is matched against the path of an incoming request.

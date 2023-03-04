@@ -1,18 +1,18 @@
 alertmanager:
   ingress:
-    ingressClassName: nginx      
+    ingressClassName: nginx
     enabled: true
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
-    - alertmanager.mak-tech.in      
+    - alertmanager.mak-tech.in
     paths:
     - /
     pathType: Prefix  
     tls:
-    - secretName: production-domain-tls
+    - secretName: dev-alertmanager
       hosts:
-      - alertmanager.mak-tech.in           
+      - alertmanager.mak-tech.in
   alertmanagerSpec:
     storage:
       volumeClaimTemplate:
@@ -21,7 +21,7 @@ alertmanager:
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
-              storage: 1Gi
+              storage: 10Gi
 grafana:
   ingress:
     ingressClassName: nginx
@@ -34,12 +34,12 @@ grafana:
     - /
     pathType: Prefix
     tls:
-    - secretName: grafana-production-domain-tls
+    - secretName: dev-grafana
       hosts:
       - grafana.mak-tech.in
   sidecar:
     datasources:
-      url: http://kube-promethues-stack-kube-prometheus.monitoring.svc.cluster.local:9090        
+      url: http://kube-promethues-stack-kube-prometheus.monitoring.svc.cluster.local:9090
   additionalDataSources:
     - name: Loki
       type: loki
@@ -60,7 +60,7 @@ prometheus:
     - /
     pathType: Prefix
     tls:
-    - secretName: prometheus.production-domain-tls
+    - secretName: dev-prometheus
       hosts:
       - prometheus.mak-tech.in
   prometheusSpec:
@@ -71,4 +71,4 @@ prometheus:
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
-              storage: 1Gi
+              storage: 50Gi

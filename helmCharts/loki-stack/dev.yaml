@@ -2,4 +2,4 @@ loki:
   persistence:
     enabled: true
     storageClassName: nfs-client
-    size: 1Gi
+    size: 50Gi

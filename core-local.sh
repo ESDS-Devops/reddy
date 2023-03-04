@@ -14,7 +14,7 @@ helm upgrade --install nfs-subdir-external-provisioner --namespace nfs-operator 
 echo "Installing Cert Manager"
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
-helm install \
+helm upgrade --install \
   cert-manager helmCharts/cert-manager \
   --namespace cert-manager \
   --create-namespace \

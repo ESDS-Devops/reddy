@@ -18,7 +18,7 @@ persistence:
   enabled: true
   accessModes:
   - ReadWriteOnce
-  size: 1Gi
+  size: 10Gi
   labels: {}
   annotations: {}
   storageClassName: nfs-client
@@ -54,14 +54,14 @@ ingress:
   enabled: true
   className: "nginx"
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod       
+    cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
     - host: minio.mak-tech.in
       paths:
         - path: /
           pathType: Prefix
   tls:
-    - secretName: production-domain-tls
+    - secretName: dev-minio
       hosts:
         - minio.mak-tech.in
 

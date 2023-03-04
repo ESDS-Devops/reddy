@@ -147,7 +147,7 @@ registry:
 
   ingress:
     # Enable the ingress for the registry server.
-    enabled: true
+    enabled: false
     # Fully qualified domain name of a network host.
     host: registry.mak-tech.in
     # Path is matched against the path of an incoming request.

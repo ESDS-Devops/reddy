@@ -2,19 +2,19 @@
 
 echo "Installing Helm"
 curl -O https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-bash manifest/get-helm-3
+bash manifest/helm/get-helm-3
 
 echo "Installing Ingress Controller"
-kubectl apply -f manifest/ingress-controller/01-nginx-ingress-controller.yaml
+kubectl apply -f manifest/ingress-controller/dev.yaml
 
 echo "Installing NFS for Cluster"
 sudo apt install -y nfs-kernel-server
-helm upgrade --install nfs-subdir-external-provisioner --namespace nfs-operator --create-namespace helmCharts/nfs-operator
+helm upgrade --install nfs-subdir-external-provisioner --namespace nfs-operator --create-namespace helmCharts/nfs-operator --values helmCharts/nfs-operator/dev.yaml 
 
 echo "Installing Cert Manager"
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
-helm install \
+helm upgrade --install \
   cert-manager helmCharts/cert-manager \
   --namespace cert-manager \
   --create-namespace \
@@ -32,7 +32,7 @@ kubectl apply -f manifest/cert-manager/04-hello-world.yaml
 echo "Installing Metrics Server App"
 helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
 helm repo update
-helm upgrade --install metrics-server --namespace kube-system helmCharts/metrics-server --set apiService.create=true
+helm upgrade --install metrics-server --namespace kube-system helmCharts/metrics-server --values  helmCharts/metrics-server/dev.yaml --set apiService.create=true --wait
 
 echo "Intalling Promethues Grafana"
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -48,7 +48,7 @@ echo "Intalling Minio"
 helm upgrade --install minio --namespace minio --create-namespace helmCharts/minio --values helmCharts/minio/dev.yaml
 
 echo "Intalling Docker Image Registry"
-helm upgrade --install docker-registry --namespace container-registry helmCharts/docker-registry --values helmCharts/docker-registry/dev.yaml
+helm upgrade --install docker-registry --namespace container-registry --create-namespace helmCharts/docker-registry --values helmCharts/docker-registry/dev.yaml
 
 echo "Intalling Docker UI"
-helm upgrade --install docker-registry-ui --namespace container-registry helmCharts/docker-registry-ui/
+helm upgrade --install docker-registry-ui --namespace container-registry --create-namespace helmCharts/docker-registry-ui/ helmCharts/docker-registry-ui/dev.yaml

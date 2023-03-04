@@ -48,7 +48,7 @@ ingress:
     nginx.ingress.kubernetes.io/enable-cors: 'true'    
   labels: {}
   tls:
-  - secretName: registry-production-domain-tls
+  - secretName: dev-docker-registry
     hosts:
       - registry.mak-tech.in
 
@@ -66,7 +66,7 @@ resources: {}
 persistence:
   accessMode: 'ReadWriteOnce'
   enabled: true
-  size: 1Gi
+  size: 100Gi
   storageClass: 'nfs-client'
 
 # set the type of filesystem to use: filesystem, s3
