@@ -1,0 +1,74 @@
+alertmanager:
+  ingress:
+    ingressClassName: nginx
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+    - local-alertmanager.mak-tech.in
+    paths:
+    - /
+    pathType: Prefix
+    tls:
+    - secretName: local-alertmanager
+      hosts:
+      - local-alertmanager.mak-tech.in
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: nfs-client
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi
+grafana:
+  ingress:
+    ingressClassName: nginx
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+    - local-grafana.mak-tech.in
+    paths:
+    - /
+    pathType: Prefix
+    tls:
+    - secretName: local-grafana
+      hosts:
+      - local-grafana.mak-tech.in
+  sidecar:
+    datasources:
+      url: http://kube-promethues-stack-kube-prometheus.monitoring.svc.cluster.local:9090
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      access: proxy
+      url: http://loki-stack.monitoring.svc.cluster.local:3100
+      jsonData:
+        maxLines: 1000
+
+prometheus:
+  ingress:
+    ingressClassName: nginx
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+    - local-prometheus.mak-tech.in
+    paths:
+    - /
+    pathType: Prefix
+    tls:
+    - secretName: local-prometheus
+      hosts:
+      - local-prometheus.mak-tech.in
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: nfs-client
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi
