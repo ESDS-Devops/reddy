@@ -20,7 +20,10 @@ loki:
   datasource:
     jsonData: "{}"
     uid: ""
-
+  persistence:
+    enabled: true
+    storageClassName: nfs-client
+    size: 2Gi
 
 promtail:
   enabled: true

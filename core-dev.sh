@@ -51,4 +51,4 @@ echo "Intalling Docker Image Registry"
 helm upgrade --install docker-registry --namespace container-registry --create-namespace helmCharts/docker-registry --values helmCharts/docker-registry/dev.yaml
 
 echo "Intalling Docker UI"
-helm upgrade --install docker-registry-ui --namespace container-registry --create-namespace helmCharts/docker-registry-ui/ helmCharts/docker-registry-ui/dev.yaml
+helm upgrade --install docker-registry-ui --namespace container-registry --create-namespace helmCharts/docker-registry-ui/ --values helmCharts/docker-registry-ui/dev.yaml
