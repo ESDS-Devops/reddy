@@ -56,14 +56,14 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
-    - host: minio.mak-tech.in
+    - host: minio.ampeleelectricals.com
       paths:
         - path: /
           pathType: Prefix
   tls:
     - secretName: dev-minio
       hosts:
-        - minio.mak-tech.in
+        - minio.ampeleelectricals.com
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

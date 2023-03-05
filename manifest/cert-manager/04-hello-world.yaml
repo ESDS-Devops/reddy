@@ -46,10 +46,10 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - ali.mak-tech.in
+    - reddy.ampeleelectricals.com
     secretName: production-domain-tls
   rules:
-  - host: ali.mak-tech.in
+  - host: reddy.ampeleelectricals.com
     http:
       paths:
       - backend:

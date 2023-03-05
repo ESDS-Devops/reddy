@@ -5,14 +5,14 @@ alertmanager:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
-    - alertmanager.mak-tech.in
+    - alertmanager.ampeleelectricals.com
     paths:
     - /
     pathType: Prefix  
     tls:
     - secretName: dev-alertmanager
       hosts:
-      - alertmanager.mak-tech.in
+      - alertmanager.ampeleelectricals.com
   alertmanagerSpec:
     storage:
       volumeClaimTemplate:
@@ -29,14 +29,14 @@ grafana:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
-    - grafana.mak-tech.in
+    - grafana.ampeleelectricals.com
     paths:
     - /
     pathType: Prefix
     tls:
     - secretName: dev-grafana
       hosts:
-      - grafana.mak-tech.in
+      - grafana.ampeleelectricals.com
   sidecar:
     datasources:
       url: http://kube-promethues-stack-kube-prometheus.monitoring.svc.cluster.local:9090
@@ -55,14 +55,14 @@ prometheus:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
-    - prometheus.mak-tech.in
+    - prometheus.ampeleelectricals.com
     paths:
     - /
     pathType: Prefix
     tls:
     - secretName: dev-prometheus
       hosts:
-      - prometheus.mak-tech.in
+      - prometheus.ampeleelectricals.com
   prometheusSpec:
     storageSpec:
       volumeClaimTemplate:

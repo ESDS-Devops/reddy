@@ -11,4 +11,4 @@ spec:
   duration: 2160h                  # Valid for 90 Days
   renewBefore: 720h                # 30d before SSL will expire, renew it
   dnsNames:
-    - "*.mak-tech.in"
+    - "*.ampeleelectricals.com"

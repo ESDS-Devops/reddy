@@ -5,7 +5,7 @@ metadata:
   name: letsencrypt-prod
 spec:
   acme:
-    email: "mohdalikadri@gmail.com"
+    email: "avinash.reddy@esds.co.in"
     privateKeySecretRef:
       name: letsencrypt-prod
     server: "https://acme-v02.api.letsencrypt.org/directory"

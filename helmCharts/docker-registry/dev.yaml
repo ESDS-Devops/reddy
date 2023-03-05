@@ -40,17 +40,17 @@ ingress:
   className: nginx
   path: /
   hosts:
-  - registry.mak-tech.in
+  - registry.ampeleelectricals.com
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/proxy-body-size: 1000m
-    nginx.ingress.kubernetes.io/cors-allow-origin: "https://registry-ui.mak-tech.in"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://registry-ui.ampeleelectricals.com"
     nginx.ingress.kubernetes.io/enable-cors: 'true'    
   labels: {}
   tls:
   - secretName: dev-docker-registry
     hosts:
-      - registry.mak-tech.in
+      - registry.ampeleelectricals.com
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

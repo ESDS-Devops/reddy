@@ -17,7 +17,7 @@ ui:
   # UI behave as a proxy of the registry
   proxy: false
   # The URL of your docker registry, may be a service (when proxy is on) or an external URL.
-  dockerRegistryUrl: https://registry.mak-tech.in
+  dockerRegistryUrl: https://registry.ampeleelectricals.com
   # Override the pull URL
   pullUrl: null
   # Show number of tags per images on catalog page. This will produce + nb images requests, not recommended on large registries.
@@ -83,7 +83,7 @@ ui:
     # Enable the ingress for the user interface.
     enabled: true
     # Fully qualified domain name of a network host.
-    host: registry-ui.mak-tech.in
+    host: registry-ui.ampeleelectricals.com
     # Path is matched against the path of an incoming request.
     path: /
     # Determines the interpretation of the Path matching, must be Prefix to serve assets.
@@ -94,7 +94,7 @@ ui:
     tls:
     - secretName: dev-registry-ui
       hosts:
-        - registry-ui.mak-tech.in
+        - registry-ui.ampeleelectricals.com
     # Annotations to apply to the user interface ingress.
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
